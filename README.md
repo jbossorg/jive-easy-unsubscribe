@@ -6,9 +6,10 @@ Provides easy way for users to unsusbscribe from Jive e-mail communication
 Installation steps
 ------------------
 
-# Install plugin via Admin console
-# Restart Jive application
-# Add a link to unsubscribe to message template like Email Digest by this code
+* Install plugin via Admin console
+* Restart Jive application
+* Add a link to unsubscribe to message template like Email Digest by this code
+
 
 	<#assign objectConstructor = "freemarker.template.utility.ObjectConstructor"?new()>
 	<#assign unsubscribeHelper = objectConstructor("org.jboss.jive.unsubscribe.services.UnsubscribeHelper")>
