@@ -35,7 +35,7 @@ public class UnsubscribeAction extends JiveActionSupport {
 		}
 
 		if (StringUtils.isBlank(sh)) {
-			return UNAUTHENTICATED;
+			return UNAUTHORIZED;
 		}
 
 		if (!UnsubscribeManagerImpl.isSecurityHashValid(username, sh)) {
@@ -46,7 +46,7 @@ public class UnsubscribeAction extends JiveActionSupport {
 		try {
 			user = userManager.getUser(username);
 		} catch (UserNotFoundException e) {
-			return UNAUTHENTICATED;
+			return UNAUTHORIZED;
 		}
 
 		unsubscribeManager.unsubscribe(user);
