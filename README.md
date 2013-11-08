@@ -8,6 +8,7 @@ Installation steps
 
 * Install plugin via Admin console
 * Restart Jive application
+* Add new Jive System Property with key `jboss.unsubscribe.securitykey` and any value
 * Add a link to unsubscribe to message template like Email Digest by this code
 
 		<#assign objectConstructor = "freemarker.template.utility.ObjectConstructor"?new()>

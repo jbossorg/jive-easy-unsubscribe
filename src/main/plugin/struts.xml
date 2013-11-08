@@ -1,0 +1,20 @@
+<!--
+  ~ JBoss, Home of Professional Open Source
+  ~ Copyright 2013 Red Hat Inc. and/or its affiliates and other contributors
+  ~ as indicated by the @authors tag. All rights reserved.
+  -->
+
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+		"http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+
+	<package name="unsubscribe-actions" namespace="/" extends="community-actions">
+
+		<action name="unsubscribe" class="org.jboss.jive.unsubscribe.struts.UnsubscribeAction">
+			<interceptor-ref name="paramsPrepareParamsStack"/>
+			<result name="input">/plugins/easy-unsubscribe/resources/templates/unsubscribe.ftl</result>
+		</action>
+
+	</package>
+
+</struts>

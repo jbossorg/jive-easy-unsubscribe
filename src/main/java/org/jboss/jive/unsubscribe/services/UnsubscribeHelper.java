@@ -20,7 +20,11 @@ public class UnsubscribeHelper {
 	 * @return
 	 */
 	public static String createSecuredUnsubscribeLink(User user) {
-		return "/unsubscribe?username=" + user.getUsername() + "&sh=NA";
+		String sh = UnsubscribeManagerImpl.getSecurityHash(user.getUsername());
+		if (sh == null) {
+			sh = "NOT-CONFIGURED";
+		}
+		return "/unsubscribe.jspa?username=" + user.getUsername() + "&sh=" + sh;
 	}
 
 }
