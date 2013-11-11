@@ -8,12 +8,15 @@ package org.jboss.jive.unsubscribe.struts;
 
 import com.jivesoftware.base.User;
 import com.jivesoftware.base.UserNotFoundException;
+import com.jivesoftware.community.aaa.authz.SystemExecutor;
 import com.jivesoftware.community.action.JiveActionSupport;
 import com.jivesoftware.community.action.util.AlwaysAllowAnonymous;
 import com.jivesoftware.community.web.struts.SetReferer;
 import com.jivesoftware.util.StringUtils;
 import org.jboss.jive.unsubscribe.services.UnsubscribeManager;
 import org.jboss.jive.unsubscribe.services.UnsubscribeManagerImpl;
+
+import java.util.concurrent.Callable;
 
 /**
  * Unsubscribe action
@@ -44,8 +47,19 @@ public class UnsubscribeAction extends JiveActionSupport {
 
 		User user;
 		try {
-			user = userManager.getUser(username);
+			SystemExecutor<User> exec = new SystemExecutor<User>(this.authProvider);
+
+			Callable<User> callable = new Callable<User>() {
+				public User call() throws UserNotFoundException {
+					return userManager.getUser(username);
+				}
+			};
+
+			user = exec.executeCallable(callable);
 		} catch (UserNotFoundException e) {
+			return UNAUTHORIZED;
+		} catch (Exception e) {
+			log.error("Error getting user for unsubscribe", e);
 			return UNAUTHORIZED;
 		}
 
