@@ -8,10 +8,21 @@ package org.jboss.jive.unsubscribe.services;
 
 import com.jivesoftware.base.User;
 import com.jivesoftware.community.JiveGlobals;
+import com.jivesoftware.community.eae.mail.EmailFrequency;
+import com.jivesoftware.community.eae.mail.NotificationSettingsManager;
+import com.jivesoftware.community.eae.mail.dao.NotificationSettingsBean;
+import com.jivesoftware.community.eae.mail.engagement.DigestFrequency;
+import com.jivesoftware.community.eae.streams.StreamManager;
+import com.jivesoftware.community.eae.streams.StreamNameTooLongException;
+import com.jivesoftware.community.user.preferences.util.EmailFrequencyOption;
+import com.jivesoftware.eae.service.client.StreamNameNotUniqueException;
+import com.jivesoftware.eae.service.client.api.StreamConfiguration;
 import com.jivesoftware.util.StringUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+
+import java.util.List;
 
 /**
  * UnsubscribeManager implementation
@@ -21,6 +32,10 @@ public class UnsubscribeManagerImpl implements UnsubscribeManager {
 	private static final Logger log = LogManager.getLogger(UnsubscribeManagerImpl.class);
 
 	public static final String SECURITY_HASH_SALT_KEY = "jboss.unsubscribe.securitykey";
+
+	private NotificationSettingsManager notificationSettingsManager;
+
+	private StreamManager streamManager;
 
 	/**
 	 * Get Security Hash for given username and
@@ -69,6 +84,44 @@ public class UnsubscribeManagerImpl implements UnsubscribeManager {
 		if (log.isInfoEnabled()) {
 			log.info("Unsubscribe for user: " + user.getUsername());
 		}
-		// TODO: Implement unsubscribe logic
+		// see com.jivesoftware.community.user.preferences.action.UserPreferencesAction.execute()
+
+		NotificationSettingsBean settings = notificationSettingsManager.getSettings(user);
+		settings.setEmailFrequency(EmailFrequency.off);
+		settings.setIncludePostContentInEmails(false);
+		settings.setNotifyActionQueue(false);
+		settings.setNotifyDirectActions(false);
+		settings.setNotifyInboxNotifications(false);
+		settings.setNotifyModerationQueue(false);
+		settings.setReceiveEmails(false);
+		settings.setReceiveHTMLEmails(false);
+
+		EmailFrequencyOption.setDigestEmailFrequencyProp(user, DigestFrequency.never);
+
+		settings.setUpgraded(true);
+
+		List<StreamConfiguration> streams = streamManager.getUserStreams(user);
+		for (StreamConfiguration config : streams) {
+			config.setReceiveEmails(false);
+
+			try {
+				streamManager.modifyStream(config);
+			} catch (StreamNameNotUniqueException ex) {
+				log.error("Cannot unsubscribe from stream", ex);
+			} catch (StreamNameTooLongException ex) {
+				log.error("Cannot unsubscribe from stream, Stream Name too long", ex);
+			}
+		}
+
+
+		notificationSettingsManager.saveSettings(user, settings);
+	}
+
+	public void setNotificationSettingsManager(NotificationSettingsManager notificationSettingsManager) {
+		this.notificationSettingsManager = notificationSettingsManager;
+	}
+
+	public void setStreamManager(StreamManager streamManager) {
+		this.streamManager = streamManager;
 	}
 }

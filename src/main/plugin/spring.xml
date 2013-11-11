@@ -10,6 +10,8 @@
 	   default-autowire="no" default-init-method="init" default-destroy-method="destroy">
 
 	<bean id="unsubscribeManager" class="org.jboss.jive.unsubscribe.services.UnsubscribeManagerImpl">
+		<property name="notificationSettingsManager" ref="notificationSettingsManagerImpl"/>
+		<property name="streamManager" ref="streamManagerImpl"/>
 	</bean>
 
 </beans>
