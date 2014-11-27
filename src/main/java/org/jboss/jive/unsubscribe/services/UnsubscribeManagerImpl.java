@@ -6,6 +6,8 @@
 
 package org.jboss.jive.unsubscribe.services;
 
+import java.util.List;
+
 import com.jivesoftware.base.User;
 import com.jivesoftware.community.JiveGlobals;
 import com.jivesoftware.community.eae.mail.EmailFrequency;
@@ -21,8 +23,6 @@ import com.jivesoftware.util.StringUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-
-import java.util.List;
 
 /**
  * UnsubscribeManager implementation
@@ -89,7 +89,6 @@ public class UnsubscribeManagerImpl implements UnsubscribeManager {
 		NotificationSettingsBean settings = notificationSettingsManager.getSettings(user);
 		settings.setEmailFrequency(EmailFrequency.off);
 		settings.setIncludePostContentInEmails(false);
-		settings.setNotifyActionQueue(false);
 		settings.setNotifyDirectActions(false);
 		settings.setNotifyInboxNotifications(false);
 		settings.setNotifyModerationQueue(false);

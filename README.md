@@ -1,7 +1,7 @@
 Jive Plugin: Easy Unsubscribe
 =============================
 
-Provides easy way for users to unsusbscribe from Jive e-mail communication
+Provides easy way for users to unsubscribe from Jive e-mail communication
 
 Installation steps
 ------------------
