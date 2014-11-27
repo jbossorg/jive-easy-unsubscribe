@@ -1,0 +1,11 @@
+*.class
+
+# IDE #
+.settings
+.project
+.classpath
+.idea
+*.iml
+
+# Package Files #
+/target
