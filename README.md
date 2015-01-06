@@ -11,8 +11,7 @@ Installation steps
 * Add new Jive System Property with key `jboss.unsubscribe.securitykey` and any value
 * Add a link to unsubscribe to message template like Email Digest by this code
 
-		<#assign objectConstructor = "freemarker.template.utility.ObjectConstructor"?new()>
-		<#assign unsubscribeHelper = objectConstructor("org.jboss.jive.unsubscribe.services.UnsubscribeHelper")>
+		<#assign unsubscribeHelper = objConstructor("org.jboss.jive.unsubscribe.services.UnsubscribeHelper")>
 		${EmailNotificationHelper.generateTrackableURL(emailTemplateName, jiveURL + unsubscribeHelper.createSecuredUnsubscribeLink(user))}
 
 
